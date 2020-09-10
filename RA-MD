@@ -1,0 +1,125 @@
+import numpy as np
+
+import pandas as pd
+
+from sklearn.metrics import confusion_matrix
+
+#upload dataset:
+
+df = pd.read_csv('….\data\DS.csv')
+
+# Calculate the Coefficient and the Exponent of RA-DM
+
+conditions = [
+
+    (df['VisitorType'] == 'New_Visitor'),
+    
+    (df['VisitorType'] == 'Returning_Visitor'),
+    
+    (df['VisitorType'] == 'Other')
+    
+        ]
+
+
+# Create a list of the values we want to assign for each visitior
+
+values = [3, 2.8, 3.2]
+
+# create a new column for the coefficient a and assign values to it using our lists 
+
+df['a'] = np.select(conditions, values)
+
+# display updated DataFrame
+
+df.head()
+
+conditions = [
+
+    (df['VisitorType'] == 'New_Visitor'),
+    
+    (df['VisitorType'] == 'Returning_Visitor'),
+    
+    (df['VisitorType'] == 'Other')
+    
+        ]
+
+# create a new column for the exponent b and assign values to it using our lists 
+
+values = [1.12, 1.2, 1.05]
+
+
+df['b'] = np.select(conditions, values)
+
+# display updated DataFrame
+
+df.head()
+
+# Risk calculation (up,pp,R)
+
+df["User"]=df[" Contextual Information "]*df["User Interest "]*df[“Responsiveness Degree”]*df[“Trust Degree”]
+
+df
+
+df["Population"]=df[" Bounce Rate "]*df["Population Traffic"]*df[“Conversation Rate”]
+
+df
+
+df["risk"]=df[" User "]*df["Population"]
+
+df
+
+# Save data and transform to binary to compare it with actual results
+
+df = a.to_csv(‘….data\output.csv')
+
+df["risks"] = df["risks"].astype(int)
+
+df["actual"] = df["actual"].astype(int)
+
+
+# Model Evaluation
+
+#confusion matrix 
+
+test_df = pd.read_csv(‘…data\output.csv')
+
+
+cmt = confusion_matrix( test_df['predicted'], test_df['prediction'])
+
+print(cmt)
+
+from sklearn.metrics import classification_report
+
+print(classification_report(test_df['predicted'], test_df['prediction'], target_names=['0', '1']))
+
+
+# Roc area
+
+
+
+import sklearn.metrics as metrics
+
+fpr, tpr, threshold = metrics.roc_curve(test_df['predicted'], test_df['prediction'])
+
+roc_auc = metrics.auc(fpr, tpr)
+
+import matplotlib.pyplot as plt
+
+plt.title('Receiver Operating Characteristic')
+
+plt.plot(fpr, tpr, 'b', label = 'AUC = %0.2f' % roc_auc)
+
+plt.legend(loc = 'lower right')
+
+plt.plot([0, 1], [0, 1],'r--')
+
+plt.xlim([0, 1])
+
+plt.ylim([0, 1])
+
+plt.ylabel('True Positive Rate')
+
+plt.xlabel('False Positive Rate')
+
+plt.show()
+
